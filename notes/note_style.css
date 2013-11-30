@@ -1,0 +1,38 @@
+#selector{
+visibility: hidden;
+background-color: gray;
+border: solid;
+position:absolute;
+top: 0px;
+width: 200px;
+overflow: scroll;
+}
+#list{
+font-size: 1em;
+}
+
+.line{
+border-bottom: 1px solid blue;
+border-top: 0px;
+border-left: 0px;
+border-right: 0px;
+background-color: yellow;
+width: 200px;
+outline: none;
+
+}
+#save{
+margin-left: 50%;
+bottom: 2%;
+position: absolute;
+}
+#open{
+margin-left: 25%;
+bottom: 2%;
+position: absolute;
+}
+body{
+background-color: yellow;
+width: 200px;
+height: 300px;
+}
