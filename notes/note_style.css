@@ -21,7 +21,11 @@ width: 200px;
 outline: none;
 }
 
-#save, #save-as, #new, #open{
+#new, #delete{
+bottom: 10%;
+position: absolute;
+}
+#save, #save-as, #open{
 bottom: 2%;
 position: absolute;
 
@@ -36,7 +40,10 @@ margin-left: 22%;
 margin-left: 54%;
 }
 #new{
-margin-left: 77%;
+margin-left: 0%;
+}
+#delete{
+margin-left: 22%;
 }
 
 body{

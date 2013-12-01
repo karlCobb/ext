@@ -3,8 +3,23 @@ var storage = chrome.storage.local;
 var notes = document.getElementsByClassName('line');
 var current_note;
 var LAST_SESSIONS_DATA = "LAST_SESSIONS_DATA";
+var LAST_SESSIONS_FILE = "LAST_SESSIONS_FILE";
 
 function start(){
+storage.get(LAST_SESSIONS_FILE, function(result){
+var file = result[LAST_SESSIONS_FILE];
+
+if(file !== undefined && file !== ''){
+storage.get(file, function(result){
+var result = result[file];
+
+for(var i = 0; i < result.length; i++)
+notes[i].value = result[i];
+
+current_note = file;
+});
+
+}else{
 storage.get(LAST_SESSIONS_DATA, function(result){
 var result = result[LAST_SESSIONS_DATA];
 
@@ -13,6 +28,13 @@ for(var i = 0; i < result.length; i++)
 notes[i].value = result[i];
 }
 });
+}
+
+
+});
+
+
+
 
 }
 
@@ -23,7 +45,14 @@ data[i] = notes[i].value;
 
 obj[LAST_SESSIONS_DATA] = data;
 
+
 storage.set(obj);
+
+if(current_note !== undefined && current_note !== ''){
+fileObj = {};
+fileObj[LAST_SESSIONS_FILE] = current_note;
+storage.set(fileObj);
+}
 
 }
 
@@ -121,12 +150,43 @@ saveDataAs();
 }
 }
 
+function deleteFile(){    
+if(current_note !== undefined){
+var confirmed = confirm('Are you sure you want to delete file ' + current_note);
+if(confirmed === true){
+storage.remove(current_note, function(result){
+
+alert(current_note + ' has been deleted');
+
+});
+}
+}else{
+alert('There is currently no file opened');
+
+}
+}
+
+function newFile(){
+if(current_note !== undefined && current_note !== ''){
+var confirmed = confirm('Would you like to save file ' + current_note + ' before opening a new file?');
+if(confirmed === true){
+saveData();
+}else{
+clear();
+current_note = '';
+}
+}
+else
+{clear();}
+
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('save-as').addEventListener('click', saveDataAs);
     document.getElementById('save').addEventListener('click', saveData);
     document.getElementById('open').addEventListener('click', openData);
-    document.getElementById('new').addEventListener('click', clear);
+    document.getElementById('new').addEventListener('click', newFile);
+    document.getElementById('delete').addEventListener('click', deleteFile);
 	start();
 	setInterval(update, 1000);
 });
