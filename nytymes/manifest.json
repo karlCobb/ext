@@ -1,0 +1,22 @@
+{
+  "name": "free times",
+  "description": "Free NyTimes",
+  "version": "2.0",
+  "permissions": [
+    "activeTab", "http://nytimes.com/*"
+  ],
+  "background": {
+    "scripts": ["background.js"], 
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "Free NyTimes"
+  },
+  "content_scripts": [
+	{
+	"matches": ["http://nytimes.com/*"],
+        "js": ["content_script.js"]
+	}
+    ],
+  "manifest_version": 2
+}

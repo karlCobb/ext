@@ -1,0 +1,25 @@
+{
+  "name": "delete margin",
+  "description": "Format page",
+  "version": "2.0",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+
+  "background": {
+    "scripts": ["background.html"],
+    "persistent": false
+  },
+
+  "browser_action": {
+    "default_title": "Delete margin"
+},
+"content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content_script.js"]
+    }
+  ],
+  "manifest_version": 2
+}

@@ -1,0 +1,62 @@
+var style = document.createElement('style');
+style.type = 'text/css';
+style.innerHTML = '.clutterRemover {color: blue; min-height: 2em; width: 10em; white-space: normal;}';
+document.getElementsByTagName('head')[0].appendChild(style);
+console.log(style);
+
+newNode={
+removed: 0,
+id: "",
+parent: ""
+};
+
+
+function createNode(id) {
+var div = document.getElementById(id);
+newNode = document.createElement('button');
+newNode.innerHTML = 'Remove ' + id;
+newNode.id = id;
+newNode.className =  "clutterRemover";
+newNode.onclick = toggleNode;
+div.appendChild(newNode);
+}
+
+
+function toggleNode() {
+if(this.removed != 1)
+{
+var div = this.parentNode;
+this.parent = div;
+var divParent = div.parentNode;
+divParent.replaceChild(this, div);
+this.removed = 1;
+this.innerHTML = 'Add ' + this.id;
+}
+else
+{
+var GetNodeBack = this.parent;
+var parent = this.parentNode;
+parent.replaceChild(GetNodeBack, this);
+GetNodeBack.appendChild(this);
+this.innerHTML = 'Remove ' + this.id;
+this.removed = 0;
+console.log(this.className);
+}
+
+}
+
+var allNodes = document.getElementsByTagName("div");
+for(var i = 0; i < allNodes.length; i++)
+{
+console.log(i);
+console.log(allNodes[i].id);
+var id = allNodes[i].id;
+if(allNodes[i].id != "")
+{
+document.getElementById(id).style.margin = "0px";
+createNode(id);
+
+}
+
+
+}
