@@ -1,10 +1,11 @@
 var data = new Array();
 var storage = chrome.storage.local;
 var notes = document.getElementsByClassName('line');
+var current_note;
 
 function clear(){
 for(var i = 0; i < notes.length; ++i)
-notes[i] = "";
+notes[i].value = "";
 }
 
 
@@ -35,7 +36,7 @@ var result = result[file];
 for(var i = 0; i < result.length; i++){
 notes[i].value = result[i];
 }
-
+current_note = file;
 });
 
 });
@@ -44,11 +45,10 @@ notes[i].value = result[i];
 
 }
 
-function saveData() {
+function saveDataAs() {
 obj = {};
 
 for (var i = 0; i < notes.length; i++){
-//if(notes[i].value != "")
 data[i] = notes[i].value;
 }
 
@@ -74,17 +74,31 @@ if(confirmed === true && saved !== null){
 obj[saved] = data;
 storage.set(obj, function(){alert('saved: ' + 
 data + ' in file ' + saved);});
+current_note = saved;
 }//end if confirmed saved
 });//end get data
 }//end confirm check
 }
 
+function saveData(){
+var obj = {};
 
+for (var i = 0; i < notes.length; i++)
+data[i] = notes[i].value;
+
+obj[current_note] = data;
+
+storage.set(obj, function(){
+alert('saved in ' + current_note);
+});
+
+}
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('save-as').addEventListener('click', saveDataAs);
     document.getElementById('save').addEventListener('click', saveData);
     document.getElementById('open').addEventListener('click', openData);
-    document.getElementById('New').addEventListener('click', clear);
+    document.getElementById('new').addEventListener('click', clear);
     
 });
