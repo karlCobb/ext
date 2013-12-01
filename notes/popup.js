@@ -2,6 +2,30 @@ var data = new Array();
 var storage = chrome.storage.local;
 var notes = document.getElementsByClassName('line');
 var current_note;
+var LAST_SESSIONS_DATA = "LAST_SESSIONS_DATA";
+
+function start(){
+storage.get(LAST_SESSIONS_DATA, function(result){
+var result = result[LAST_SESSIONS_DATA];
+
+if(result !== null){
+for(var i = 0; i < result.length; i++)
+notes[i].value = result[i];
+}
+});
+
+}
+
+function update(){
+obj = {};
+for(var i = 0; i < notes.length; ++i)
+data[i] = notes[i].value;
+
+obj[LAST_SESSIONS_DATA] = data;
+
+storage.set(obj);
+
+}
 
 function clear(){
 for(var i = 0; i < notes.length; ++i)
@@ -82,6 +106,7 @@ current_note = saved;
 
 function saveData(){
 var obj = {};
+if(current_note !== undefined){
 
 for (var i = 0; i < notes.length; i++)
 data[i] = notes[i].value;
@@ -91,7 +116,9 @@ obj[current_note] = data;
 storage.set(obj, function(){
 alert('saved in ' + current_note);
 });
-
+}else{
+saveDataAs();
+}
 }
 
 
@@ -100,5 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('save').addEventListener('click', saveData);
     document.getElementById('open').addEventListener('click', openData);
     document.getElementById('new').addEventListener('click', clear);
-    
+	start();
+	setInterval(update, 1000);
 });
