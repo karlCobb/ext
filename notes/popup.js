@@ -10,16 +10,8 @@ storage.get(LAST_SESSIONS_FILE, function(result){
 var file = result[LAST_SESSIONS_FILE];
 
 if(file !== undefined && file !== ''){
-storage.get(file, function(result){
-var result = result[file];
-
-for(var i = 0; i < result.length; i++)
-notes[i].value = result[i];
-
 current_note = file;
-});
-
-}else{
+}
 storage.get(LAST_SESSIONS_DATA, function(result){
 var result = result[LAST_SESSIONS_DATA];
 
@@ -28,14 +20,7 @@ for(var i = 0; i < result.length; i++)
 notes[i].value = result[i];
 }
 });
-}
-
-
 });
-
-
-
-
 }
 
 function update(){
@@ -48,12 +33,9 @@ obj[LAST_SESSIONS_DATA] = data;
 
 storage.set(obj);
 
-if(current_note !== undefined && current_note !== ''){
 fileObj = {};
 fileObj[LAST_SESSIONS_FILE] = current_note;
 storage.set(fileObj);
-}
-
 }
 
 function clear(){
@@ -74,9 +56,9 @@ storage.getBytesInUse(null, function (bytes){
 var bytes = bytes;
 
 
-var fileList = "";
+var fileList = "\n";
 
-for(var i = 0; i < keys.length; i++){
+for(var i = 3; i < keys.length; i++){
 var newString = keys[i];
 fileList = fileList.concat("\t", newString, "\n");
 }
@@ -89,6 +71,7 @@ var result = result[file];
 for(var i = 0; i < result.length; i++){
 notes[i].value = result[i];
 }
+
 current_note = file;
 });
 
@@ -135,7 +118,7 @@ current_note = saved;
 
 function saveData(){
 var obj = {};
-if(current_note !== undefined){
+if(current_note !== undefined && current_note !== ''){
 
 for (var i = 0; i < notes.length; i++)
 data[i] = notes[i].value;
@@ -171,15 +154,16 @@ if(current_note !== undefined && current_note !== ''){
 var confirmed = confirm('Would you like to save file ' + current_note + ' before opening a new file?');
 if(confirmed === true){
 saveData();
-}else{
+}
+}
 clear();
+setInterval(setCurrent_note, 2000);
+}
+
+function setCurrent_note(){
 current_note = '';
 }
-}
-else
-{clear();}
 
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('save-as').addEventListener('click', saveDataAs);
